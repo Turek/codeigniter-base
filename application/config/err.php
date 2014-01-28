@@ -26,4 +26,7 @@ define('SMTP_PORT', 25);
 // What information should be also attached to error e-mails.
 define('ERR_MAIL_FOOTERS', 'POST,GET,SESSION');
 
+// PHPMailer configuration.
+define('PATH_PHPMAILER', str_replace('/', DIRECTORY_SEPARATOR, FCPATH . 'application/libraries/PHPMailer/class.phpmailer.php'));
+
 $config['err_silent'] = FALSE;
