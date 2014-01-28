@@ -2,6 +2,13 @@
 
 My custom Codeigniter base with PHPMailer, Error reporting via e-mails and a little tweaked Template engine.
 
+## .htaccess file
+
+Main site setup happens here.
+Rename .htaccess.sample to .htaccess. It is added to .gitignore not to override it after pushing to server.
+Configure ENVIRONMENT, SITE_NAME (used for error reporting to identify the site) and DATABASE details here.
+And thats it! You don't have to change any other configs.
+
 ## Error reporting
 
 A helper for reporting errors while they happen to specified e-mail address.
