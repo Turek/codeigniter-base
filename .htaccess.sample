@@ -1,0 +1,75 @@
+RewriteEngine On 
+Options FollowSymLinks
+
+################################################################################
+##########  Custom variables  ##################################################
+
+# Set it depending on your local environment, for example if you access it from
+# http://localhost/~yourusername/argos-face-reskin/www then set it to:
+# /~yourusername/site/www/ - for dev, staging or live use / only
+
+RewriteBase /site/
+
+
+# Environment variable is used to load different config files for different
+# environments, and is also used to define from where error log files are
+# comming from on emails.
+# Use lowercase letters only.
+
+setenv ENVIRONMENT localhost
+
+
+# Site name variable is just used for defining name of the site for error
+# reporting in emails
+
+setenv SITE_NAME "Test project"
+
+
+# Database details
+# Create empty database, put it's name here.
+
+setenv DB_HOST "localhost"
+setenv DB_NAME "site"
+setenv DB_USER "root"
+setenv DB_PASS ""
+
+################################################################################
+
+#RewriteCond $1 !^(index\.php|images|robots\.txt)
+#RewriteRule ^(.*)$ /index.php/$1 [L]
+
+RewriteRule ^error/(.*)$ index.php?/main/index/$1 [L]
+
+#Removes access to the system folder by users.
+#Additionally this will allow you to create a System.php controller,
+#previously this would not have been possible.
+#'system' can be replaced if you have renamed your system folder.
+RewriteCond %{REQUEST_URI} ^system.*
+RewriteRule ^(.*)$ /index.php?/$1 [L]
+  
+#When your application folder isn't in the system folder
+#This snippet prevents user access to the application folder
+#Submitted by: Fabdrol
+#Rename 'application' to your applications folder name.
+RewriteCond %{REQUEST_URI} ^application.*
+RewriteRule ^(.*)$ /index.php?/$1 [L]
+
+#Checks to see if the user is attempting to access a valid file,
+#such as an image or css document, if this isn't true it sends the
+#request to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?/$1 [L]
+
+# block proxy servers from site access
+# http://perishablepress.com/press/2008/04/20/how-to-block-proxy-servers-via-htaccess/
+
+RewriteCond %{HTTP:VIA}                 !^$ [OR]
+RewriteCond %{HTTP:FORWARDED}           !^$ [OR]
+RewriteCond %{HTTP:USERAGENT_VIA}       !^$ [OR]
+RewriteCond %{HTTP:X_FORWARDED_FOR}     !^$ [OR]
+RewriteCond %{HTTP:PROXY_CONNECTION}    !^$ [OR]
+RewriteCond %{HTTP:XPROXY_CONNECTION}   !^$ [OR]
+RewriteCond %{HTTP:HTTP_PC_REMOTE_ADDR} !^$ [OR]
+RewriteCond %{HTTP:HTTP_CLIENT_IP}      !^$
+RewriteRule ^(.*)$ - [F]
